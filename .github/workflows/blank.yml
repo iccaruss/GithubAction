@@ -51,8 +51,8 @@ jobs:
 #        uses: doanpt/AndroidTestReportAction@v1.0
 #        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
 
-      - name: Prevent merge on test failure
-        if: failure()
-        run: |
-          echo "Unit tests failed. Merging is not allowed."
-          exit 1
+#      - name: Prevent merge on test failure
+#        if: failure()
+#        run: |
+#          echo "Unit tests failed. Merging is not allowed."
+#          exit 1
