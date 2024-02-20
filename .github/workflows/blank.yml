@@ -25,6 +25,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: "temurin"
+          java-version: 17
+
       - name: Unit tests
         run: ./gradlew test # use can use another command to run juni test like: ./gradlew testDebugUnitTest
         continue-on-error: true # IMPORTANT: allow pipeline to continue to Android Test Report step
