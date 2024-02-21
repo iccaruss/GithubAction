@@ -1,46 +1,62 @@
-# This is a basic workflow to help you get started with Actions
-
+# GitHub에서 보여줄 workflow의 이름
 name: CI
 
-# Controls when the workflow will run
+# 워크플로우가 실행될 조건을 지정하기 위해 on 사용
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
-  push:
-    branches: [ "master" ]
-  pull_request:
+  # 트리거 이벤트 참고 https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
+  # "master" 브랜치에서 pull request 이벤트가 발생하면 워크플로우가 트리거
+  pull_request: # [push, fork] 형식으로 복수 사용 가능
     branches: [ "master" ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+# 워크플로우 실행 시 필요한 권한을 설정
+permissions:
+  contents: read
+  issues: read
+  checks: write
+  pull-requests: write
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# 하나 이상의 작업으로 구성된 워크플로우를 정의
 jobs:
-  # This workflow contains a single job called "build"
+  # "build"라는 단일 작업을 포함하는 워크플로우
   build:
-    # The type of runner that the job will run on
+    # 작업이 실행될 runner의 유형을 설정
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # 작업을 구성하는 단계를 나열
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      # 작업이 사용할 수 있도록 $GITHUB_WORKSPACE 아래에 저장소를 체크아웃
+      - name: Checkout the code
+        uses: actions/checkout@v3
 
+      # Java 환경을 설정
+      # Temurin 배포판을 사용하고 Java 버전을 17로 설정
       - name: Set up Java
         uses: actions/setup-java@v2
         with:
           distribution: "temurin"
           java-version: 17
 
-      - name: Unit tests
-        run: ./gradlew test # use can use another command to run juni test like: ./gradlew testDebugUnitTest
-        continue-on-error: true # IMPORTANT: allow pipeline to continue to Android Test Report step
+      # gradlew 스크립트에 대한 실행 권한을 부여
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
 
-      - name: Make Unit test report
-        uses: doanpt/AndroidTestReportAction@v1.0
-        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
+      # 단위 테스트를 실행
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest --stacktrace
 
-      - name: Prevent merge on test failure
-        if: failure()
-        run: |
-          echo "Unit tests failed. Merging is not allowed."
-          exit 1
+      #  단위 테스트 결과를 게시
+      - name: Publish Test Results
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: "**/test-results/**/*.xml"
+
+      - name: Send Slack Job Status
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: Pull Request Created
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+        if: success()
