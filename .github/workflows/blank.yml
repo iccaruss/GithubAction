@@ -51,12 +51,12 @@ jobs:
         with:
           files: "**/test-results/**/*.xml"
 
-      - name: action-slack
+      - name: Send Slack Job Status
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           author_name: Pull Request Created
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        if: always() # Pick up events even if the job fails or is canceled.
+        if: success()
