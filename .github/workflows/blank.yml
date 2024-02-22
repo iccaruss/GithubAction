@@ -81,7 +81,7 @@ jobs:
               },
               {
                 title: "repo",
-                value: "${{ env.AS_REPO }}",
+                value: "${env.AS_REPO}",
                 short: true
               },
               {
@@ -95,6 +95,8 @@ jobs:
 
       - name: Log commit titles
         run: |
+          echo "Commit repo: "${env.AS_REPO}"
+          echo "Commit eventName: "${ process.env.AS_EVENT_NAME }"
           echo "Commit Titles: ${{ steps.get_commits.outputs.commitTitlesString }}"
 
 #      - name: Send Slack Job Status
