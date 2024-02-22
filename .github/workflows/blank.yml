@@ -72,22 +72,13 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: custom
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+          fields: workflow,job,commit,repo,author,pullRequest
           custom_payload: |
+            custom_payload: |
             {
               attachments: [{
-                color: "good",
-                text: "${{ steps.get_commits.outputs.commitTitlesString }}",
-              },
-              {
-                title: "repo",
-                value: "${env.AS_REPO}",
-                short: true
-              },
-              {
-                title: "eventName",
-                value: "${ process.env.AS_EVENT_NAME }",
-                short: true
+                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다\n 승인하러 ㄱㄱ ${process.env.AS_PULL_REQUEST}`,
               }]
             }
         env:
