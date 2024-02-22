@@ -8,6 +8,8 @@ on:
   pull_request: # [push, fork] 형식으로 복수 사용 가능
     branches: [ "master" ]
 
+  env: COMMIT_STRING_ENV:
+
 # 워크플로우 실행 시 필요한 권한을 설정
 permissions:
   contents: read
@@ -65,8 +67,7 @@ jobs:
             const commits = response.data;
             const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
             const commitTitlesString = commitTitles.join('\n');
-            console.log("commitTitlesString : " + commitTitlesString);
-            core.setOutput("commit_titles_string", commitTitlesString);
+            console.log(`::set-env name=COMMIT_TITLES_STRING::${commitTitlesString}`);
 
       - name: Send Slack Job Status
         if: success()
@@ -94,7 +95,7 @@ jobs:
                 },
                 {
                   "title": "Message",
-                  "value": "${{ steps.get_commits.outputs.commit_titles_string }}",
+                  "value": "${{ env.COMMIT_TITLES_STRING }}",
                   "short": false
                 }]
               }]
@@ -104,7 +105,7 @@ jobs:
 
       - name: Log commit titles
         run: |
-          echo "Commit Titles: ${{ steps.get_commits.outputs.commit_titles_string }}"
+          echo "Commit Titles: ${{ env.COMMIT_TITLES_STRING }}"
 
 #      - name: Send Slack Job Status
 #        if: success()
