@@ -77,7 +77,7 @@ jobs:
             {
               "text": "Custom Field Check",
               "attachments": [{
-                "author_name": "8398a7@action-slack",
+                "author_name": "${github.event.commits[0].author.name}",
                 "fallback": "fallback",
                 "color": "good",
                 "title": "CI Result",
