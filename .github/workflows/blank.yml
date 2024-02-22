@@ -8,8 +8,6 @@ on:
   pull_request: # [push, fork] 형식으로 복수 사용 가능
     branches: [ "master" ]
 
-  env: COMMIT_STRING_ENV:
-
 # 워크플로우 실행 시 필요한 권한을 설정
 permissions:
   contents: read
