@@ -72,6 +72,8 @@ jobs:
         if: success()
         uses: 8398a7/action-slack@v3
         with:
+          script: |
+            console.log(steps.get_commits.outputs.commit_titles_string);
           status: custom
           custom_payload: |
             {
