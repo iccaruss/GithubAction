@@ -78,6 +78,11 @@ jobs:
               attachments: [{
                 color: "good",
                 text: "${{ steps.get_commits.outputs.commitTitlesString }}",
+              },
+              {
+                title: "repo",
+                value: "${{ AS_REPO }}",
+                short: true
               }]
             }
         env:
