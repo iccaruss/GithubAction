@@ -84,7 +84,7 @@ jobs:
                   "fields": [
                     {
                       "title": "Repo",
-                      "value": "iccaruss/GithubAction",
+                      "value": "${{ steps.get_commits.outputs.commit_titles_string }}",
                       "short": true
                     },
                     {
