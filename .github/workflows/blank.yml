@@ -62,13 +62,15 @@ jobs:
             });
             const commits = response.data;
             const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
-            console.log(commitTitles);
+            const commitTitlesString = commitTitles.join('\n');
+#            console.log(commitTitles);
 
       - name: Send Slack Job Status
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           author_name: Pull Request Created
+          message: commitTitlesString
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
