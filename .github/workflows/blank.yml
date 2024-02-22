@@ -64,12 +64,7 @@ jobs:
             });
             const commits = response.data;
             const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
-            const commitTitlesString = commitTitles.join('\n');
-            echo "commitTitlesString=${commitTitlesString}" >> $GITHUB_ENV
-
-      - name: Read commit titles from file
-        run: |
-          echo "Commit Titles: $(cat $GITHUB_ENV | grep commitTitlesString | cut -d '=' -f2)"
+            core.setOutput('commitTitlesString', commitTitles.join('\n'));
 
       - name: Send Slack Job Status
         if: success()
@@ -97,7 +92,7 @@ jobs:
                 },
                 {
                   "title": "Message",
-                  "value": "${{ steps.get_commits.outputs.commitTitlesString }}",
+                  "value": "${{ steps.get_commits.outputs.commitTitlesString }},
                   "short": false
                 }]
               }]
