@@ -72,14 +72,14 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: custom
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
           custom_payload: |
             {
-              "text": "Custom Field Check",
-              "attachments": [{
-                "title": "Message",
-                "value": "${{ steps.get_commits.outputs.commitTitlesString }}",
-                "short": false
+              attachments: [{
+                color: 'good',
+                text: '${{ steps.get_commits.outputs.commitTitlesString }}',
               }]
+            }
           }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
