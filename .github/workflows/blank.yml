@@ -72,12 +72,82 @@ jobs:
         if: success()
         uses: 8398a7/action-slack@v3
         with:
-          status: ${{ job.status }}
+          status: success
           author_name: Pull Request Created
-          text: ${{ steps.get_commits.outputs.commit_titles_string }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+          custom_payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "${{ steps.get_commits.outputs.commit_titles_string }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "fields": [
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Repo:*\n iccaruss/GithubAction"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Message:*\n Merge ${{ steps.get_commits.outputs.commit }} into ${{ github.sha }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Commit:*\n ${{ github.sha }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Author:*\n ${{ github.actor }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Action:*\n ${{ github.event_name }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Job:*\n ${{ github.job }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Took:*\n ${{ job.completed_at - job.started_at }} sec"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Event Name:*\n ${{ github.event_name }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Ref:*\n ${{ github.ref }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Workflow:*\n ${{ github.workflow }}"
+                    },
+                    {
+                      "type": "mrkdwn",
+                      "text": "*Pull Request:*\n ${{ github.event.pull_request.title }}"
+                    }
+                  ]
+                }
+              ]
+            }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+#      - name: Send Slack Job Status
+#        if: success()
+#        uses: 8398a7/action-slack@v3
+#        with:
+#          status: ${{ job.status }}
+#          author_name: Pull Request Created
+#          text: ${{ steps.get_commits.outputs.commit_titles_string }}
+#          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
 
 #      # For GitHub Enterprise
 #      if: success()
