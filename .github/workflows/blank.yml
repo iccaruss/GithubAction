@@ -77,7 +77,7 @@ jobs:
               "text": "Custom Field Check",
               "attachments": [{
                 "title": "Message",
-                "value": "skip ci 테스트\nskip ci 테스트\n타이틀 테스트\n타이틀 테스트\n타이틀 테스트2\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom\nslack custom",
+                "value": "${{ steps.get_commits.outputs.commitTitlesString }}",
                 "short": false
               }]
           }
