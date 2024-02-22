@@ -72,8 +72,6 @@ jobs:
         if: success()
         uses: 8398a7/action-slack@v3
         with:
-          script: |
-            console.log(steps.get_commits.outputs.commit_titles_string);
           status: custom
           custom_payload: |
             {
@@ -103,6 +101,10 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Log commit titles
+        run: |
+          echo "Commit Titles: ${{ steps.get_commits.outputs.commit_titles_string }}"
 
 #      - name: Send Slack Job Status
 #        if: success()
