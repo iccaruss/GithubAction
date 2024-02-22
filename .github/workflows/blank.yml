@@ -64,8 +64,9 @@ jobs:
             });
             const commits = response.data;
             const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
-            const commitStrings =  commitTitles.join('\n')
-            core.setOutput('commitTitlesString', JSON.stringify(commitStrings));
+            const commitStrings =  commitTitles.join('\\n'); // 여기서 이스케이프 처리
+            
+            core.setOutput('commitTitlesString', commitStrings);
 
       - name: Send Slack Job Status
         if: success()
