@@ -80,7 +80,7 @@ jobs:
                   "title": "Message",
                   "value": "${{ steps.get_commits.outputs.commitTitlesString }}",
                   "short": false
-                }
+                }]
               }]
             }
         env:
