@@ -74,14 +74,35 @@ jobs:
           status: custom
           fields: workflow,job,commit,repo,author,pullRequest
           custom_payload: |
+            custom_payload: |
             {
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다\n 승인하러 ㄱㄱ ${process.env.AS_PULL_REQUEST}`,
+                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다\n
+                ${steps.get_commits.outputs.commitTitlesString}\n
+                승인하러 ㄱㄱ ${process.env.AS_PULL_REQUEST}`,
               }]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+
+#          {
+#            attachments: [ {
+#              color: "good",
+#              text: "${{ steps.get_commits.outputs.commitTitlesString }}",
+#            },
+#              {
+#                title: "repo",
+#                value: "${env.AS_REPO}",
+#                short: true
+#              },
+#              {
+#                title: "eventName",
+#                value: "${ process.env.AS_EVENT_NAME }",
+#                short: true
+#              } ]
+#          }
 
       - name: Log commit titles
         run: |
