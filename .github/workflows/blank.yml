@@ -51,6 +51,19 @@ jobs:
         with:
           files: "**/test-results/**/*.xml"
 
+      - name: Get commits using GitHub Script
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const response = await github.request('GET /repos/{owner}/{repo}/pulls/{pull_number}/commits', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number
+            });
+            const commits = response.data;
+            const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
+            console.log(commitTitles);
+
       - name: Send Slack Job Status
         uses: 8398a7/action-slack@v3
         with:
