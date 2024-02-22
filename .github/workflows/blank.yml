@@ -83,6 +83,11 @@ jobs:
                 title: "repo",
                 value: "${{ env.AS_REPO }}",
                 short: true
+              },
+              {
+                title: "eventName",
+                value: "${{ env.AS_EVENT_NAME }}",
+                short: true
               }]
             }
         env:
