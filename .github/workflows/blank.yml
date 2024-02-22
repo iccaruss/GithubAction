@@ -65,7 +65,7 @@ jobs:
             const commits = response.data;
             const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
             const commitTitlesString = commitTitles.join('\n');
-            console.log(`::set-env name=COMMIT_TITLES_STRING::${commitTitlesString}`);
+            console.log(`COMMIT_TITLES_STRING=${commitTitlesString}`);
 
       - name: Send Slack Job Status
         if: success()
