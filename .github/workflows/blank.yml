@@ -72,64 +72,70 @@ jobs:
         if: success()
         uses: 8398a7/action-slack@v3
         with:
-          status: success
-          author_name: Pull Request Created
+          status: custom
           custom_payload: |
             {
-              "blocks": [
+              "text": "Succeeded GitHub Actions",
+              "attachments": [
                 {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "${{ steps.get_commits.outputs.commit_titles_string }}"
-                  }
-                },
-                {
-                  "type": "section",
+                  "fallback": "Pull Request Created",
+                  "color": "good",
+                  "title": "Pull Request Created",
                   "fields": [
                     {
-                      "type": "mrkdwn",
-                      "text": "*Repo:*\n iccaruss/GithubAction"
+                      "title": "Repo",
+                      "value": "iccaruss/GithubAction",
+                      "short": true
                     },
                     {
-                      "type": "mrkdwn",
-                      "text": "*Message:*\n Merge ${{ steps.get_commits.outputs.commit }} into ${{ github.sha }}"
+                      "title": "Message",
+                      "value": "${{ steps.get_commits.outputs.commit_titles_string }}",
+                      "short": true
                     },
                     {
-                      "type": "mrkdwn",
-                      "text": "*Commit:*\n ${{ github.sha }}"
+                      "title": "Commit",
+                      "value": "29adf866",
+                      "short": true
                     },
                     {
-                      "type": "mrkdwn",
-                      "text": "*Author:*\n ${{ github.actor }}"
+                      "title": "Author",
+                      "value": "iccaruss<iccaruss@users.noreply.github.com>",
+                      "short": true
                     },
                     {
-                      "type": "mrkdwn",
-                      "text": "*Action:*\n ${{ github.event_name }}"
+                      "title": "Action",
+                      "value": "action",
+                      "short": true
                     },
                     {
-                      "type": "mrkdwn",
-                      "text": "*Job:*\n ${{ github.job }}"
+                      "title": "Job",
+                      "value": "build",
+                      "short": true
                     },
                     {
-                      "type": "mrkdwn",
-                      "text": "*Took:*\n ${{ steps.get_commits.outputs.duration }} sec"
+                      "title": "Took",
+                      "value": "1 min 37 sec",
+                      "short": true
                     },
                     {
-                      "type": "mrkdwn",
-                      "text": "*Event Name:*\n ${{ github.event_name }}"
+                      "title": "EventName",
+                      "value": "pull_request",
+                      "short": true
                     },
                     {
-                      "type": "mrkdwn",
-                      "text": "*Ref:*\n ${{ github.ref }}"
+                      "title": "Ref",
+                      "value": "refs/pull/7/merge",
+                      "short": true
                     },
                     {
-                      "type": "mrkdwn",
-                      "text": "*Workflow:*\n ${{ github.workflow }}"
+                      "title": "Workflow",
+                      "value": "CI",
+                      "short": true
                     },
                     {
-                      "type": "mrkdwn",
-                      "text": "*Pull Request:*\n ${{ github.event.pull_request.title }}"
+                      "title": "PullRequest",
+                      "value": "skip ci 테스트 #7",
+                      "short": true
                     }
                   ]
                 }
