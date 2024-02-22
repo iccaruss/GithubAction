@@ -90,7 +90,7 @@ jobs:
                     {
                       "title": "Message",
                       "value": "${{ steps.get_commits.outputs.commit_titles_string }}",
-                      "short": true
+                      "short": false
                     },
                     {
                       "title": "Commit",
