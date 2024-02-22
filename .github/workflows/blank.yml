@@ -113,7 +113,7 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Took:*\n ${{ job.completed_at - job.started_at }} sec"
+                      "text": "*Took:*\n ${{ formatDuration(job.completed_at - job.started_at) }}"
                     },
                     {
                       "type": "mrkdwn",
