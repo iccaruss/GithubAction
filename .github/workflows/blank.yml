@@ -64,7 +64,7 @@ jobs:
             });
             const commits = response.data;
             const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
-            core.setOutput('commitTitlesString', commitTitles.join('\n'));
+            core.setOutput('commitTitlesString', JSON.stringify( commitTitles.join('\n')));
 
       - name: Send Slack Job Status
         if: success()
@@ -82,12 +82,12 @@ jobs:
                 "text": "Succeeded",
                 "fields": [{
                   "title": "lower case",
-                  "value": "${{ 'LOWER CASE CHECK' | lower }}",
+                  "value": "LOWER CASE CHECK".toLowerCase(),
                   "short": true
                 },
                 {
                   "title": "reverse",
-                  "value": "${{ 'gnirts esrever' | reverse }}",
+                  "value": "gnirts esrever".split('').reverse().join(''),
                   "short": true
                 },
                 {
