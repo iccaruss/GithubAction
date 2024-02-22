@@ -67,6 +67,10 @@ jobs:
             const commitTitlesString = commitTitles.join('\n');
             echo "commitTitlesString=${commitTitlesString}" >> $GITHUB_ENV
 
+      - name: Read commit titles from file
+        run: |
+          echo "Commit Titles: $(cat $GITHUB_ENV | grep commitTitlesString | cut -d '=' -f2)"
+
       - name: Send Slack Job Status
         if: success()
         uses: 8398a7/action-slack@v3
