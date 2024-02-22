@@ -82,17 +82,17 @@ jobs:
                 "text": "Succeeded",
                 "fields": [{
                   "title": "lower case",
-                  "value": "LOWER CASE CHECK".toLowerCase(),
+                  "value": "${{ 'LOWER CASE CHECK' | lower }}",
                   "short": true
                 },
                 {
                   "title": "reverse",
-                  "value": "gnirts esrever".split('').reverse().join(''),
+                  "value": "${{ 'gnirts esrever' | reverse }}",
                   "short": true
                 },
                 {
                   "title": "Message",
-                  "value": "${{ steps.get_commits.outputs.commitTitlesString }},
+                  "value": "${{ steps.get_commits.outputs.commitTitlesString }}",
                   "short": false
                 }]
               }]
