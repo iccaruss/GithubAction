@@ -75,71 +75,31 @@ jobs:
           status: custom
           custom_payload: |
             {
-              "text": "Succeeded GitHub Actions",
-              "attachments": [
+              text: "Custom Field Check",
+              attachments: [{
+                "author_name": "8398a7@action-slack", // json
+                fallback: 'fallback',
+                color: 'good',
+                title: 'CI Result',
+                text: 'Succeeded',
+                fields: [{
+                  title: 'lower case',
+                  value: 'LOWER CASE CHECK'.toLowerCase(),
+                  short: true
+                },
                 {
-                  "fallback": "Pull Request Created",
-                  "color": "good",
-                  "title": "Pull Request Created",
-                  "fields": [
-                    {
-                      "title": "Repo",
-                      "value": "${{ steps.get_commits.outputs.commit_titles_string }}",
-                      "short": true
-                    },
-                    {
-                      "title": "Message",
-                      "value": "${{ steps.get_commits.outputs.commit_titles_string }}",
-                      "short": false
-                    },
-                    {
-                      "title": "Commit",
-                      "value": "29adf866",
-                      "short": true
-                    },
-                    {
-                      "title": "Author",
-                      "value": "iccaruss<iccaruss@users.noreply.github.com>",
-                      "short": true
-                    },
-                    {
-                      "title": "Action",
-                      "value": "action",
-                      "short": true
-                    },
-                    {
-                      "title": "Job",
-                      "value": "build",
-                      "short": true
-                    },
-                    {
-                      "title": "Took",
-                      "value": "1 min 37 sec",
-                      "short": true
-                    },
-                    {
-                      "title": "EventName",
-                      "value": "pull_request",
-                      "short": true
-                    },
-                    {
-                      "title": "Ref",
-                      "value": "refs/pull/7/merge",
-                      "short": true
-                    },
-                    {
-                      "title": "Workflow",
-                      "value": "CI",
-                      "short": true
-                    },
-                    {
-                      "title": "PullRequest",
-                      "value": "skip ci 테스트 #7",
-                      "short": true
-                    }
-                  ]
-                }
-              ]
+                  title: 'reverse',
+                  value: 'gnirts esrever'.split('').reverse().join(''),
+                  short: true
+                },
+                {
+                  title: 'Message',
+                  value: '${{ steps.get_commits.outputs.commit_titles_string }}',
+                  short: false
+                }],
+                actions: [{
+                }]
+              }]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
