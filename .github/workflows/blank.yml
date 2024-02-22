@@ -80,7 +80,6 @@ jobs:
                 text: "${{ steps.get_commits.outputs.commitTitlesString }}",
               }]
             }
-          }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
