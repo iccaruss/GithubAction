@@ -66,7 +66,7 @@ jobs:
             const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
             const commitTitlesString = commitTitles.join('\n');
             env.COMMIT_TITLES_STRING = commitTitlesString;
-            console.log(`COMMIT_TITLES_STRING=${ env.COMMIT_TITLES_STRING }`);
+            console.log(`COMMIT_TITLES_STRING=${ process.env.COMMIT_TITLES_STRING }`);
 
       - name: Send Slack Job Status
         if: success()
@@ -94,7 +94,7 @@ jobs:
                 },
                 {
                   "title": "Message",
-                  "value": "${{ env.COMMIT_TITLES_STRING }}",
+                  "value": "${{ process.env.COMMIT_TITLES_STRING }}",
                   "short": false
                 }]
               }]
@@ -104,7 +104,7 @@ jobs:
 
       - name: Log commit titles
         run: |
-          echo "Commit Titles: ${{ env.COMMIT_TITLES_STRING }}"
+          echo "Commit Titles: ${{ process.env.COMMIT_TITLES_STRING }}"
 
 #      - name: Send Slack Job Status
 #        if: success()
