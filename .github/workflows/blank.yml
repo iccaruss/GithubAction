@@ -52,6 +52,8 @@ jobs:
           files: "**/test-results/**/*.xml"
 
       - name: Get commits using GitHub Script
+        if: success()
+        id: get_commits
         uses: actions/github-script@v5
         with:
           script: |
@@ -63,20 +65,21 @@ jobs:
             const commits = response.data;
             const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
             const commitTitlesString = commitTitles.join('\n');
-#            console.log(commitTitles);
+            console.log(commitTitlesString);
 
       - name: Send Slack Job Status
+        if: success()
         uses: 8398a7/action-slack@v3
         with:
           status: ${{ job.status }}
           author_name: Pull Request Created
-          message: commitTitlesString
+          message: ${{ steps.get_commits.outputs.commit_titles_string }}
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        if: success()
 
 #      # For GitHub Enterprise
+#      if: success()
 #      - uses: 8398a7/action-slack@v3
 #        with:
 #          github_base_url: https://your.ghe.com # Specify your GHE
@@ -84,4 +87,3 @@ jobs:
 #          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
 #        env:
 #          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-#        if: success()
