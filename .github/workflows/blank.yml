@@ -94,7 +94,7 @@ jobs:
                 },
                 {
                   "title": "Message",
-                  "value": "${{ process.env.COMMIT_TITLES_STRING }}",
+                  "value": "${{ env.COMMIT_TITLES_STRING }}",
                   "short": false
                 }]
               }]
@@ -104,7 +104,7 @@ jobs:
 
       - name: Log commit titles
         run: |
-          echo "Commit Titles: ${{ process.env.COMMIT_TITLES_STRING }}"
+          echo "Commit Titles: ${{ COMMIT_TITLES_STRING }}"
 
 #      - name: Send Slack Job Status
 #        if: success()
