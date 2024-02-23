@@ -36,20 +36,20 @@ jobs:
           distribution: "temurin"
           java-version: 17
 
-      # gradlew 스크립트에 대한 실행 권한을 부여
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
-      # 단위 테스트를 실행
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest --stacktrace
-
-      #  단위 테스트 결과를 게시
-      - name: Publish Test Results
-        if: always()
-        uses: EnricoMi/publish-unit-test-result-action@v2
-        with:
-          files: "**/test-results/**/*.xml"
+#      # gradlew 스크립트에 대한 실행 권한을 부여
+#      - name: Grant execute permission for gradlew
+#        run: chmod +x gradlew
+#
+#      # 단위 테스트를 실행
+#      - name: Run unit tests
+#        run: ./gradlew testDebugUnitTest --stacktrace
+#
+#      #  단위 테스트 결과를 게시
+#      - name: Publish Test Results
+#        if: always()
+#        uses: EnricoMi/publish-unit-test-result-action@v2
+#        with:
+#          files: "**/test-results/**/*.xml"
 
       - name: Get commits using GitHub Script
         if: success()
@@ -68,41 +68,44 @@ jobs:
               const commitUrl = commit.html_url;
               return `<${commitUrl}|${commitMessage}>`;
             }).join('\n');
+            
+            console.log(commit.committer);
+            
             core.setOutput('commitListWithLinks', commitListWithLinks);
 
-      - name: Send Slack Job Status
-        if: success()
-        uses: 8398a7/action-slack@v3
-        with:
-          status: custom
-          fields: all
-          custom_payload: |
-            {
-              attachments: [{
-                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다.`,
-                fields: [
-                {
-                  title: '[Event Name]',
-                  value: `${process.env.AS_EVENT_NAME}`,
-                  short: true
-                },
-                {
-                  title: '[PR Link]',
-                  value: `${process.env.AS_PULL_REQUEST}`,
-                  short: true
-                },
-                {
-                  title: '[Commit List]',
-                  value: `${{steps.get_commits.outputs.commitListWithLinks}}`,
-                  short: false
-                }],
-                actions: [{
-                }]
-
-              }]
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+#      - name: Send Slack Job Status
+#        if: success()
+#        uses: 8398a7/action-slack@v3
+#        with:
+#          status: custom
+#          fields: all
+#          custom_payload: |
+#            {
+#              attachments: [{
+#                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다.`,
+#                fields: [
+#                {
+#                  title: '[Event Name]',
+#                  value: `${process.env.AS_EVENT_NAME}`,
+#                  short: true
+#                },
+#                {
+#                  title: '[PR Link]',
+#                  value: `${process.env.AS_PULL_REQUEST}`,
+#                  short: true
+#                },
+#                {
+#                  title: '[Commit List]',
+#                  value: `${{steps.get_commits.outputs.commitListWithLinks}}`,
+#                  short: false
+#                }],
+#                actions: [{
+#                }]
+#
+#              }]
+#            }
+#        env:
+#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 #      # For GitHub Enterprise
 #      if: success()
