@@ -40,16 +40,16 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-#      # 단위 테스트를 실행
-#      - name: Run unit tests
-#        run: ./gradlew testDebugUnitTest --stacktrace
-#
-#      #  단위 테스트 결과를 게시
-#      - name: Publish Test Results
-#        if: always()
-#        uses: EnricoMi/publish-unit-test-result-action@v2
-#        with:
-#          files: "**/test-results/**/*.xml"
+      # 단위 테스트를 실행
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest --stacktrace
+
+      #  단위 테스트 결과를 게시
+      - name: Publish Test Results
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: "**/test-results/**/*.xml"
 
       - name: Get commits using GitHub Script
         if: success()
@@ -76,9 +76,7 @@ jobs:
           custom_payload: |
             {
               attachments: [{
-                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
                 text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다\n ${{steps.get_commits.outputs.commitTitlesString}}`,
-            
                 fields: [
                 {
                   title: 'EVENT_NAME',
@@ -86,7 +84,7 @@ jobs:
                   short: true
                 },
                 {
-                  title: 'LINK',
+                  title: 'PR LINK',
                   value: `${process.env.AS_PULL_REQUEST}`,
                   short: false
                 }],
@@ -97,40 +95,6 @@ jobs:
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-#          {
-#            attachments: [ {
-#              color: "good",
-#              text: "${{ steps.get_commits.outputs.commitTitlesString }}",
-#            },
-#              {
-#                title: "repo",
-#                value: "${env.AS_REPO}",
-#                short: true
-#              },
-#              {
-#                title: "eventName",
-#                value: "${ process.env.AS_EVENT_NAME }",
-#                short: true
-#              } ]
-#          }
-
-      - name: Log commit titles
-        run: |
-          echo "Commit repo: '${{ env.AS_REPO }}'"
-          echo "Commit eventName: '${{ env.AS_EVENT_NAME }}'"
-          echo "Commit Titles: ${{ steps.get_commits.outputs.commitTitlesString }}"
-
-#      - name: Send Slack Job Status
-#        if: success()
-#        uses: 8398a7/action-slack@v3
-#        with:
-#          status: ${{ job.status }}
-#          author_name: Pull Request Created
-#          text: ${{ steps.get_commits.outputs.commit_titles_string }}
-#          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
 
 #      # For GitHub Enterprise
 #      if: success()
