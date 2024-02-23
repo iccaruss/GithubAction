@@ -84,22 +84,22 @@ jobs:
                 text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다.`,
                 fields: [
                 {
-                  title: '[Committer]',
+                  title: `[Committer]`,
                   value: `${{steps.get_commits.outputs.committer}}`,
                   short: true
                 },
                 {
-                  title: '[Event Name]',
+                  title: `[Event Name]`,
                   value: `${process.env.AS_EVENT_NAME}`,
                   short: true
                 },
                 {
-                  title: '[Commit List]',
-                  value: "${{steps.get_commits.outputs.commitListWithLinks}}",
+                  title: `[Commit List]`,
+                  value: `${{steps.get_commits.outputs.commitListWithLinks}}`,
                   short: false
                 },
                 {
-                  title: '[PR Link]',
+                  title: `[PR Link]`,
                   value: `${process.env.AS_PULL_REQUEST}`,
                   short: true
                 }],
