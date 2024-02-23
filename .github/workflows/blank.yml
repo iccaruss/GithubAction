@@ -101,7 +101,7 @@ jobs:
                 {
                   title: '[Commit List]',
                   value: `${{steps.get_commits.outputs.commitListWithLinks}}`,
-                  short: false
+                  short: true
                 }],
                 actions: [{
                 }]
