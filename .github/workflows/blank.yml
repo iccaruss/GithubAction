@@ -95,7 +95,7 @@ jobs:
                 },
                 {
                   title: '[Commit List]',
-                  value: '${{steps.get_commits.outputs.commitListWithLinks}}',
+                  value: "${{steps.get_commits.outputs.commitListWithLinks}}",
                   short: false
                 },
                 {
