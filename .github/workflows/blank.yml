@@ -94,13 +94,13 @@ jobs:
                   short: true
                 },
                 {
-                  title: '[PR Link]',
-                  value: `${process.env.AS_PULL_REQUEST}`,
-                  short: true
-                },
-                {
                   title: '[Commit List]',
                   value: `${{steps.get_commits.outputs.commitListWithLinks}}`,
+                  short: false
+                },
+                {
+                  title: '[PR Link]',
+                  value: `${process.env.AS_PULL_REQUEST}`,
                   short: true
                 }],
                 actions: [{
