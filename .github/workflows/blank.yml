@@ -67,7 +67,7 @@ jobs:
               const commitMessage = commit.commit.message.split('\n')[0];
               const commitUrl = commit.html_url;
               return `<${commitUrl}|${commitMessage}>`;
-            }).join('\n');
+            }).join('|');
             
             core.setOutput('commitListWithLinks', commitListWithLinks);
             core.setOutput('committer', commits[0].commit.committer.name);
