@@ -64,7 +64,7 @@ jobs:
             });
             const commits = response.data;
             const commitListWithLinks = commits.map(commit => {
-              return `[${commit.commit.message.split('\n')[0]}](${commit.html_url})`; // 각 커밋 메시지에 해당하는 URL을 링크로 추가
+              return `<${commit.commit.message.split('\n')[0]}|(${commit.html_url})>`; // 각 커밋 메시지에 해당하는 URL을 링크로 추가
             }).join('\n'); // 이스케이프 처리 후 개행으로 구분된 문자열로 변환
             core.setOutput('commitListWithLinks', commitListWithLinks);
 
