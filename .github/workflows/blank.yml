@@ -79,11 +79,7 @@ jobs:
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
                 text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다\n ${{steps.get_commits.outputs.commitTitlesString}}`,
             
-                fields: [{
-                  title: 'ref',
-                  value: `${process.env.AS_REF}`,
-                  short: true
-                },
+                fields: [
                 {
                   title: 'EVENT_NAME',
                   value: `${process.env.AS_EVENT_NAME}`,
