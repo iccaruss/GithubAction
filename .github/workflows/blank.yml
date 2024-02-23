@@ -69,7 +69,7 @@ jobs:
               return `<${commitUrl}|${commitMessage}>`;
             }).join('\n');
             
-            console.log(commit.committer);
+            console.log(commits.committer);
             
             core.setOutput('commitListWithLinks', commitListWithLinks);
 
