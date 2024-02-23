@@ -36,10 +36,10 @@ jobs:
           distribution: "temurin"
           java-version: 17
 
-      # gradlew 스크립트에 대한 실행 권한을 부여
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-
+#      # gradlew 스크립트에 대한 실행 권한을 부여
+#      - name: Grant execute permission for gradlew
+#        run: chmod +x gradlew
+#
 #      # 단위 테스트를 실행
 #      - name: Run unit tests
 #        run: ./gradlew testDebugUnitTest --stacktrace
@@ -63,9 +63,14 @@ jobs:
               pull_number: context.payload.pull_request.number
             });
             const commits = response.data;
-            const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
-            const commitStrings =  commitTitles.join('\\n'); // 여기서 이스케이프 처리
-            core.setOutput('commitTitlesString', commitStrings);
+            const commitListWithLinks = commits.map(commit => {
+              const commitMessage = commit.commit.message.split('\n')[0];
+              const commitUrl = commit.html_url;
+              return `<${commitUrl}|${commitMessage}>`;
+            }).join('|');
+            
+            core.setOutput('commitListWithLinks', commitListWithLinks);
+            core.setOutput('committer', commits[0].commit.committer.name);
 
       - name: Send Slack Job Status
         if: success()
@@ -76,61 +81,35 @@ jobs:
           custom_payload: |
             {
               attachments: [{
-                color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다\n ${{steps.get_commits.outputs.commitTitlesString}}`,
-            
+                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다.`,
                 fields: [
                 {
-                  title: 'EVENT_NAME',
+                  title: `[Committer]`,
+                  value: `${{steps.get_commits.outputs.committer}}`,
+                  short: true
+                },
+                {
+                  title: `[Event Name]`,
                   value: `${process.env.AS_EVENT_NAME}`,
                   short: true
                 },
                 {
-                  title: 'LINK',
-                  value: `${process.env.AS_PULL_REQUEST}`,
+                  title: `[Commit List]`,
+                  value: `${{steps.get_commits.outputs.commitListWithLinks}}`,
                   short: false
+                },
+                {
+                  title: `[PR Link]`,
+                  value: `${process.env.AS_PULL_REQUEST}`,
+                  short: true
                 }],
                 actions: [{
                 }]
-            
+
               }]
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-#          {
-#            attachments: [ {
-#              color: "good",
-#              text: "${{ steps.get_commits.outputs.commitTitlesString }}",
-#            },
-#              {
-#                title: "repo",
-#                value: "${env.AS_REPO}",
-#                short: true
-#              },
-#              {
-#                title: "eventName",
-#                value: "${ process.env.AS_EVENT_NAME }",
-#                short: true
-#              } ]
-#          }
-
-      - name: Log commit titles
-        run: |
-          echo "Commit repo: '${{ env.AS_REPO }}'"
-          echo "Commit eventName: '${{ env.AS_EVENT_NAME }}'"
-          echo "Commit Titles: ${{ steps.get_commits.outputs.commitTitlesString }}"
-
-#      - name: Send Slack Job Status
-#        if: success()
-#        uses: 8398a7/action-slack@v3
-#        with:
-#          status: ${{ job.status }}
-#          author_name: Pull Request Created
-#          text: ${{ steps.get_commits.outputs.commit_titles_string }}
-#          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
 
 #      # For GitHub Enterprise
 #      if: success()
