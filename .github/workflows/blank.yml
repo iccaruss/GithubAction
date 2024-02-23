@@ -72,9 +72,10 @@ jobs:
         uses: 8398a7/action-slack@v3
         with:
           status: custom
-          fields: workflow,job,commit,repo,author,pullRequest
+          fields: all
           custom_payload: |
             {
+              icon_emoji: ":github:",
               attachments: [{
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
                 text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다\n ${{steps.get_commits.outputs.commitTitlesString}} \n 승인하러 ㄱㄱ ${process.env.AS_PULL_REQUEST}`,
