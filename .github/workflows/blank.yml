@@ -66,7 +66,7 @@ jobs:
             const commitListWithLinks = commits.map(commit => {
               const commitMessage = commit.commit.message.split('\n')[0];
               const commitUrl = commit.html_url;
-              console.log(commit.committer);
+              console.log(commit.commit.committer);
               return `<${commitUrl}|${commitMessage}>`;
             }).join('\n');
             
