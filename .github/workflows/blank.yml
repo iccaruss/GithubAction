@@ -76,8 +76,13 @@ jobs:
           custom_payload: |
             {
               attachments: [{
-                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다\nCommit List : \n${{steps.get_commits.outputs.commitTitlesString}}`,
+                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다.`,
                 fields: [
+                {
+                  title: 'COMMIT LIST',
+                  value: `${{steps.get_commits.outputs.commitTitlesString}}`,
+                  short: false
+                },
                 {
                   title: 'EVENT_NAME',
                   value: `${process.env.AS_EVENT_NAME}`,
