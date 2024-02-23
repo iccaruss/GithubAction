@@ -77,24 +77,23 @@ jobs:
             {
               icon_emoji: ":github:",
               attachments: [{
+                fields: [{
+                      title: 'lower case',
+                      value: 'LOWER CASE CHECK'.toLowerCase(),
+                      short: true
+                    },
+                    {
+                      title: 'eventName',
+                      value: `${process.env.AS_EVENT_NAME}`,
+                      short: true
+                    },
+                    {
+                      title: 'long title1',
+                      value: 'long value1',
+                      short: false
+                    }],
                 color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
                 text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다\n ${{steps.get_commits.outputs.commitTitlesString}} \n 승인하러 ㄱㄱ ${process.env.AS_PULL_REQUEST}`,
-            
-                fields: [{
-                  title: 'lower case',
-                  value: 'LOWER CASE CHECK'.toLowerCase(),
-                  short: true
-                },
-                {
-                  title: 'eventName',
-                  value: `${process.env.AS_EVENT_NAME}`,
-                  short: true
-                },
-                {
-                  title: 'long title1',
-                  value: 'long value1',
-                  short: false
-                }],
                 actions: [{
                 }]
             
