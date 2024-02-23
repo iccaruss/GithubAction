@@ -66,7 +66,7 @@ jobs:
 #            const commitTitles = commits.map(commit => commit.commit.message.split('\n')[0]);
             const commitTitles = commits.map(commit => {
               console.log(commit.commit.message); // commit.commit.message를 출력
-                return commit.commit.message.split('\n')[0];
+              return commit.commit.message.split('\n')[0];
             });
             const commitUrls = commits.map(commit => commit.html_url);
             console.log(commitUrls);
