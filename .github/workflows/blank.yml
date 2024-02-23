@@ -66,45 +66,50 @@ jobs:
             const commitListWithLinks = commits.map(commit => {
               const commitMessage = commit.commit.message.split('\n')[0];
               const commitUrl = commit.html_url;
-              console.log(commit.commit.committer);
               return `<${commitUrl}|${commitMessage}>`;
             }).join('\n');
             
             core.setOutput('commitListWithLinks', commitListWithLinks);
+            core.setOutput('committer', commits[0].commit.committer.name);
 
-#      - name: Send Slack Job Status
-#        if: success()
-#        uses: 8398a7/action-slack@v3
-#        with:
-#          status: custom
-#          fields: all
-#          custom_payload: |
-#            {
-#              attachments: [{
-#                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다.`,
-#                fields: [
-#                {
-#                  title: '[Event Name]',
-#                  value: `${process.env.AS_EVENT_NAME}`,
-#                  short: true
-#                },
-#                {
-#                  title: '[PR Link]',
-#                  value: `${process.env.AS_PULL_REQUEST}`,
-#                  short: true
-#                },
-#                {
-#                  title: '[Commit List]',
-#                  value: `${{steps.get_commits.outputs.commitListWithLinks}}`,
-#                  short: false
-#                }],
-#                actions: [{
-#                }]
-#
-#              }]
-#            }
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Send Slack Job Status
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: all
+          custom_payload: |
+            {
+              attachments: [{
+                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다.`,
+                fields: [
+                {
+                  title: '[Committer]',
+                  value: `${{steps.get_commits.outputs.committer}}`,
+                  short: true
+                },
+                {
+                  title: '[Event Name]',
+                  value: `${process.env.AS_EVENT_NAME}`,
+                  short: true
+                },
+                {
+                  title: '[PR Link]',
+                  value: `${process.env.AS_PULL_REQUEST}`,
+                  short: true
+                },
+                {
+                  title: '[Commit List]',
+                  value: `${{steps.get_commits.outputs.commitListWithLinks}}`,
+                  short: false
+                }],
+                actions: [{
+                }]
+
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 #      # For GitHub Enterprise
 #      if: success()
