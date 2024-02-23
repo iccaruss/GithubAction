@@ -63,48 +63,44 @@ jobs:
               pull_number: context.payload.pull_request.number
             });
             const commits = response.data;
-            const commitTitles = commits.map(commit => {
-              console.log(commit.commit); // commit.commit.message를 출력
-              return commit.commit.message.split('\n')[0];
-            });
-            const commitUrls = commits.map(commit => commit.html_url);
-            console.log(commitUrls);
-            const commitStrings =  commitTitles.join('\\n'); // 여기서 이스케이프 처리
-            core.setOutput('commitTitlesString', commitStrings);
+            const commitListWithLinks = commits.map(commit => {
+              return `[${commit.commit.message.split('\n')[0]}](${commit.html_url})`; // 각 커밋 메시지에 해당하는 URL을 링크로 추가
+            }).join('\n'); // 이스케이프 처리 후 개행으로 구분된 문자열로 변환
+            core.setOutput('commitListWithLinks', commitListWithLinks);
 
-#      - name: Send Slack Job Status
-#        if: success()
-#        uses: 8398a7/action-slack@v3
-#        with:
-#          status: custom
-#          fields: all
-#          custom_payload: |
-#            {
-#              attachments: [{
-#                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다.`,
-#                fields: [
-#                {
-#                  title: 'COMMIT LIST',
-#                  value: `${{steps.get_commits.outputs.commitTitlesString}}`,
-#                  short: false
-#                },
-#                {
-#                  title: 'EVENT_NAME',
-#                  value: `${process.env.AS_EVENT_NAME}`,
-#                  short: true
-#                },
-#                {
-#                  title: 'PR LINK',
-#                  value: `${process.env.AS_PULL_REQUEST}`,
-#                  short: true
-#                }],
-#                actions: [{
-#                }]
-#
-#              }]
-#            }
-#        env:
-#          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Send Slack Job Status
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: all
+          custom_payload: |
+            {
+              attachments: [{
+                text: `${process.env.AS_REPO} repo에 ${process.env.AS_AUTHOR} 님이 PR을 올렸습니다.`,
+                fields: [
+                {
+                  title: 'COMMIT LIST',
+                  value: `${{steps.get_commits.outputs.commitListWithLinks}}`,
+                  short: false
+                },
+                {
+                  title: 'EVENT_NAME',
+                  value: `${process.env.AS_EVENT_NAME}`,
+                  short: true
+                },
+                {
+                  title: 'PR LINK',
+                  value: `${process.env.AS_PULL_REQUEST}`,
+                  short: true
+                }],
+                actions: [{
+                }]
+
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 #      # For GitHub Enterprise
 #      if: success()
